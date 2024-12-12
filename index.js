@@ -10,7 +10,10 @@ const {
 const bot = new Bot(process.env.BOT_API_KEY);
 
 bot.command("start", async (ctx) => {
-  const startKeyboard = new InlineKeyboard().text("Старт", "start");
+  const startKeyboard = new InlineKeyboard().url(
+    "Старт",
+    "https://miniapp-1138f.web.app/"
+  );
   await ctx.reply(
     "Рекомендательная система ивентов! Запускай приложение по кнопке Старт, выбирай подходящее время и получай рекомендации ивентов.",
     {
