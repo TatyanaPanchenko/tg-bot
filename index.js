@@ -24,8 +24,9 @@ bot.command("start", async (ctx) => {
 
 bot.on("message", async (ctx) => {
   const startKeyboard = new InlineKeyboard()
-    .text("Старт", "start").webApp(text: "Старт", url: "https://magiccoffee-d17d0.web.app/")
-    await ctx.reply(
+    .text("Старт", "start")
+    .webApp("Старт", "https://magiccoffee-d17d0.web.app/");
+  await ctx.reply(
     "Запускай приложение по кнопке Старт, выбирай подходящее время и получай рекомендации ивентов.",
     {
       reply_markup: startKeyboard,
