@@ -12,7 +12,7 @@ const bot = new Bot(process.env.BOT_API_KEY);
 bot.command("start", async (ctx) => {
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
-    "https://magiccoffee-d17d0.web.app/"
+    "https://miniapp-1138f.web.app/"
   );
   await ctx.reply(
     "Запускай приложение по кнопке Старт, выбирай подходящее время и получай рекомендации ивентов.",
@@ -23,9 +23,10 @@ bot.command("start", async (ctx) => {
 });
 
 bot.on("message", async (ctx) => {
-  const startKeyboard = new InlineKeyboard()
-    .text("Старт", "start")
-    .webApp("Старт", "https://magiccoffee-d17d0.web.app/");
+  const startKeyboard = new InlineKeyboard().webApp(
+    "Старт",
+    "https://miniapp-1138f.web.app/"
+  );
   await ctx.reply(
     "Запускай приложение по кнопке Старт, выбирай подходящее время и получай рекомендации ивентов.",
     {
