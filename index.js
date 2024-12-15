@@ -29,6 +29,7 @@ bot.on("message", async (ctx) => {
     }
   );
 });
+
 bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Error while handing update ${ctx.update.update_id}`);
