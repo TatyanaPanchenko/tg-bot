@@ -19,7 +19,7 @@ bot.command("start", async (ctx) => {
 bot.on("message", async (ctx) => {
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
-    "https://miniapp-1138f.app/"
+    "https://miniapp-1138f.firebaseapp.com/"
   );
   await ctx.reply(
     "Запускай приложение по кнопке Старт, выбирай подходящее время и получай рекомендации ивентов.",
