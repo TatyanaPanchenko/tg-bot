@@ -1,6 +1,13 @@
 require("dotenv").config();
+
 // import { getCity } from "./request.js";
-const { Bot, GrammyError, HttpError, InlineKeyboard } = require("grammy");
+const {
+  Bot,
+  GrammyError,
+  HttpError,
+  InlineKeyboard,
+  Keyboard,
+} = require("grammy");
 
 async function getCity(longitude, latitude) {
   try {
@@ -24,6 +31,7 @@ bot.command("start", async (ctx) => {
     "Старт",
     "https://miniapp-1138f.web.app/"
   );
+
   await ctx.reply(
     "Отправляйте свою геопозицию для более точного поиска, запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
     {
@@ -40,6 +48,10 @@ bot.on("message", async (ctx) => {
   ).then((geo) => {
     return geo.response;
   });
+  let urlParams = new URLSearchParams({
+    location: "123",
+  });
+  // `${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
   // data.response.GeoObjectCollection.featureMember[0].GeoObject
   //       .metaDataProperty.GeocoderMetaData.AddressDetails.Country.AddressLine
   // if (ctx.message.location) {
@@ -50,6 +62,7 @@ bot.on("message", async (ctx) => {
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
     "https://miniapp-1138f.web.app/"
+    //   `https://miniapp-1138f.web.app/?$location=${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
   );
   await ctx.reply(
     "Запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
@@ -60,11 +73,24 @@ bot.on("message", async (ctx) => {
   );
 });
 
-// bot.on("message", async (ctx) => {
-//   await bot.sendMessage(
-//     ctx.chat.id,
-//     `Широта: ${ctx.location.latitude}\nДолгота: ${ctx.location.longitude}`
-//   );
+bot.on("message", async (ctx) => {
+  await bot.sendMessage(
+    ctx.chat.id,
+    `Широта: ${ctx.location.latitude}\nДолгота: ${ctx.location.longitude}`
+  );
+});
+// tg.sendData(key);
+
+// const shareKeyboard = new Keyboard()
+//   .requestLocation("Геолокация")
+//   .requestContact("Контакт")
+//   .requestPoll("Опрос")
+//   .placeholder("Я хочу поделиться...")
+//   .resized();
+// bot.command("share", async (ctx) => {
+//   await ctx.reply("Какими данными хочешь поделиться?", {
+//     reply_markup: shareKeyboard,
+//   });
 // });
 
 bot.catch((err) => {
