@@ -27,30 +27,33 @@ async function getCity(longitude, latitude) {
 const bot = new Bot(process.env.BOT_API_KEY);
 
 bot.command("start", async (ctx) => {
-  const startKeyboard = new InlineKeyboard().webApp(
-    "Старт",
-    "https://miniapp-1138f.web.app/"
-  );
-
+  const startKeyboard = new Keyboard()
+    .requestLocation("Геопозиция")
+    .webApp("Старт", "https://miniapp-1138f.web.app/")
+    .resized();
+  // const shareKeyboard = new Keyboard().requestLocation("Геолокация").resized();
   await ctx.reply(
     "Отправляйте свою геопозицию для более точного поиска, запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
     {
       reply_markup: startKeyboard,
-      request_location: true,
     }
   );
+  // await ctx.reply("Отправляйте свою геопозицию для более точного поиска.", {
+  //   reply_markup: shareKeyboard,
+  //   request_location: true,
+  // });
 });
 
-bot.on("message", async (ctx) => {
+bot.on(":location", async (ctx) => {
   const result = await getCity(
     ctx.message.location.longitude,
     ctx.message.location.latitude
   ).then((geo) => {
     return geo.response;
   });
-  let urlParams = new URLSearchParams({
-    location: "123",
-  });
+  // let urlParams = new URLSearchParams({
+  //   location: "123",
+  // });
   // `${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
   // data.response.GeoObjectCollection.featureMember[0].GeoObject
   //       .metaDataProperty.GeocoderMetaData.AddressDetails.Country.AddressLine
@@ -61,8 +64,8 @@ bot.on("message", async (ctx) => {
   // }
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
-    "https://miniapp-1138f.web.app/"
-    //   `https://miniapp-1138f.web.app/?$location=${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
+    // "https://miniapp-1138f.web.app/?location=123"
+    `https://miniapp-1138f.web.app/?location=${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
   );
   await ctx.reply(
     "Запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
@@ -74,15 +77,34 @@ bot.on("message", async (ctx) => {
 });
 
 bot.on("message", async (ctx) => {
-  await bot.sendMessage(
+  const result = await getCity(
+    ctx?.message?.location?.longitude,
+    ctx?.message?.location?.latitude
+  ).then((geo) => {
+    return geo.response;
+  });
+  const startKeyboard = new InlineKeyboard().webApp(
+    "Старт",
+    `https://miniapp-1138f.web.app/?location=${result?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.AddressDetails?.Country?.AddressLine}`
+  );
+  // await ctx.reply(
+  //   "Запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
+  //   {
+  //     reply_markup: startKeyboard,
+  //     reply_parameters: { message_id: ctx.msg.message_id },
+  //   }
+  // );
+  await bot.api.sendMessage(
     ctx.chat.id,
-    `Широта: ${ctx.location.latitude}\nДолгота: ${ctx.location.longitude}`
+    "Запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
+    {
+      reply_markup: startKeyboard,
+      reply_parameters: { message_id: ctx.msg.message_id },
+    }
   );
 });
-// tg.sendData(key);
 
-// const shareKeyboard = new Keyboard()
-//   .requestLocation("Геолокация")
+// const shareKeyboard = new Keyboard().requestLocation("Геолокация");
 //   .requestContact("Контакт")
 //   .requestPoll("Опрос")
 //   .placeholder("Я хочу поделиться...")
