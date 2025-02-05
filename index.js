@@ -14,7 +14,7 @@ const bot = new Bot(process.env.BOT_API_KEY);
 bot.command("start", async (ctx) => {
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
-    "https://botchat-git-main-tatyanapanchenkos-projects.vercel.app/"
+    "https://botchat-kappa.vercel.app/"
   );
 
   await ctx.reply(
@@ -28,7 +28,7 @@ bot.command("start", async (ctx) => {
 bot.on("message", async (ctx) => {
   const startKeyboard = new InlineKeyboard().webApp(
     "Старт",
-    "https://botchat-git-main-tatyanapanchenkos-projects.vercel.app/"
+    "https://botchat-kappa.vercel.app/"
   );
   await ctx.reply(
     "Запускайте приложение по кнопке Старт, выбирайте подходящее время и получайте рекомендации ивентов.",
